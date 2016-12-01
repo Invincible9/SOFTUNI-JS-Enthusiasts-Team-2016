@@ -1,0 +1,14 @@
+
+.btn  {
+    margin: 10px;
+}
+.input-group {
+    padding: 10px;
+}
+
+.form-inline{
+    background-color: #555555;
+    display:block;
+    width:30%;
+    margin:0 auto;
+}
