@@ -2,11 +2,12 @@ import $ from 'jquery';
 
 const KinveyRequester = (function() {
     const baseUrl = "https://baas.kinvey.com/";
-    const appKey = "kid_SkjtoqOfg";
+    const appKey = "kid_SkjtoqOfg"; //kid_SkjtoqOfg
     const appSecret = "6c9bdb78676f46c1a2f18a0a7aa056d0";
     const kinveyAppAuthHeaders = {
         'Authorization': "Basic " + btoa(appKey + ":" + appSecret),
     };
+    const _guestCredentials = 'ea334f5e-5719-4d63-bf93-9d9cbcd83fa9.WEiFXXETAvIVSfWQ9A/Il9v/7FC1ZSZmnBZDYG3A9qQ=';
 
     function loginUser(username, password) {
         return $.ajax({
@@ -39,19 +40,19 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders(),
         });
     }
-    // function findAllMyPosts() {
-    //     return $.ajax({
-    //         method: "GET",
-    //         url: baseUrl + "appdata/" + appKey + "/posts",
-    //         headers: getKinveyUserAuthHeaders()
-    //     });
-    //
-    // }
+
     function findAllPosts() {
         return $.ajax({
             method: "GET",
             url: baseUrl + "appdata/" + appKey + "/posts",
             headers: getKinveyUserAuthHeaders()
+        });
+    }
+    function findGuestPosts() {
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "appdata/" + appKey + "/posts",
+            headers: {'Authorization': "Kinvey " + _guestCredentials}
         });
     }
 
@@ -91,7 +92,7 @@ const KinveyRequester = (function() {
 
     return {
         loginUser, registerUser, logoutUser,
-        findAllPosts, createPost, findPostById, editPost, deletePost
+        findAllPosts, createPost, findPostById, editPost, deletePost, findGuestPosts
     }
 })();
 

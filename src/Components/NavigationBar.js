@@ -18,11 +18,9 @@ export default class NavigationBar extends Component {
             return (
                 <nav className="navigation-bar">
                     <a href="#" onClick={this.props.homeClicked}>Home</a>
-                    <a href="#" onClick={this.props.postsClicked}>List All Posts</a>
+                    <a href="#" onClick={this.props.postsClicked}>List Books</a>
                     <a href="#" onClick={this.props.createPostClicked}>Create Post</a>
-                    <a href="#" onClick={this.props.myPostClicked}>My Post</a>
                     <a href="#" onClick={this.props.logoutClicked}>Logout</a>
-
                     <span className="loggedInUser">
                         Welcome, {username}!
                     </span>
