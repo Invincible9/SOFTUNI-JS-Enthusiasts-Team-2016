@@ -11,7 +11,8 @@ import EditPostView from './Views/EditPostView';
 import DeletePostView from './Views/DeletePostView';
 import PostsView from './Views/PostView';
 import PostDetails from './Views/PostDetailsView';
-import MyPostsView from './Views/MyPostsView'
+import MyPostsView from './Views/MyPostsView';
+import PostComment from './Views/AddPostCommentView';
 import KinveyRequester from './KinveyRequester';
 import GalleryView from './Views/GalleryView';
 import UploadPhotoView from './Views/UploadPhotoView';
@@ -205,15 +206,60 @@ export default class App extends Component {
         }
     }
 
-    showViewDetails(data) {
-        KinveyRequester.findPostById(data).then(details.bind(this));
-        function details(dataSuccess) {
+    showViewDetails(postId) {
+        let selectedPostRequest = KinveyRequester.findPostById(postId);
+        let selectedPostCommentsRequest = KinveyRequester.findSelectedPostComments(postId);
+        Promise.all([selectedPostRequest, selectedPostCommentsRequest])
+            .then(details.bind(this))
+
+        function details([post, comments]) {
             this.showView(<PostDetails
-                imageUrl={dataSuccess.imageUrl}
-                author={dataSuccess.author}
-                content={dataSuccess.description}
+                    comments={comments}
+                    post={post}
+                    postId={post._id}
+                    imageUrl={post.imageUrl}
+                    author={post.author}
+                    content={post.description}
+                    addCommentClicked={this.showViewAddComment.bind(this)}
                 />
             );
+        }
+    }
+
+    showViewAddComment(postId) {
+        KinveyRequester.findPostById(postId)
+            .then(showAddCommentForm.bind(this));
+
+        function showAddCommentForm(post) {
+            this.showView(
+                <PostComment
+                    post={post}
+                    onsubmit={this.addCommentToDatabase.bind(this)}
+                    title={post.title}
+                    postAuthor={post.author}
+                    description={post.description}
+                    commentAuthor={this.state.username}
+                />
+            );
+        }
+    }
+
+    addCommentToDatabase(post, postId, postImgUrl, postContent, postAuthor, comment, commentAuthor){
+        KinveyRequester.addPostComment(postId, comment, commentAuthor)
+            .then(addPostCommentSuccess.bind(this))
+
+        function addPostCommentSuccess(){
+            KinveyRequester.findPostById(postId)
+                .then(this.showView(
+                    <PostDetails
+                        post={post}
+                        postId={postId}
+                        imageUrl={postImgUrl}
+                        author={postAuthor}
+                        content={postContent}
+                        addCommentClicked={this.showViewAddComment.bind(this)}
+                    />
+                ))
         }
     }
 

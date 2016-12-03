@@ -63,12 +63,30 @@ const KinveyRequester = (function() {
         });
     }
 
+    function findSelectedPostComments(postId){
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "appdata/" + appKey + "/postComments/" + `?query={"postId":"${postId}"}`,
+            headers: getKinveyUserAuthHeaders()
+        })
+    };
+
     function createPost(title, author, description,imageUrl,date) {
         return $.ajax({
             method: "POST",
             url: baseUrl + "appdata/" + appKey + "/posts",
             headers: getKinveyUserAuthHeaders(),
             data: { title, author, description,imageUrl,date }
+        });
+    }
+
+    function addPostComment(postId, comment, commentAuthor){
+        return $.ajax({
+            method: "POST",
+            url: baseUrl + "appdata/" + appKey + "/postComments",
+            headers: getKinveyUserAuthHeaders(),
+            data: JSON.stringify({ comment, postId, commentAuthor }),
+            contentType: 'application/JSON'
         });
     }
 
@@ -108,7 +126,7 @@ const KinveyRequester = (function() {
     }
 
     return {
-        loginUser, registerUser, logoutUser,
+        loginUser, registerUser, logoutUser, findSelectedPostComments, addPostComment,
         findAllPosts, createPost, findPostById, editPost, deletePost, uploadPhoto, findAllPhotos
     }
 })();
