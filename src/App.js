@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
-
 import NavigationBar from './Components/NavigationBar';
 import Footer from './Components/Footer';
 import HomeView from './Views/HomeView';
@@ -12,8 +11,10 @@ import EditPostView from './Views/EditPostView';
 import DeletePostView from './Views/DeletePostView';
 import PostsView from './Views/PostView';
 import PostDetails from './Views/PostDetailsView';
-
+import MyPostsView from './Views/MyPostsView'
 import KinveyRequester from './KinveyRequester';
+import GalleryView from './Views/GalleryView';
+import UploadPhotoView from './Views/UploadPhotoView';
 import $ from 'jquery';
 
 export default class App extends Component {
@@ -36,6 +37,9 @@ export default class App extends Component {
                         registerClicked={this.showRegisterView.bind(this)}
                         postsClicked={this.showPostsView.bind(this)}
                         createPostClicked={this.showCreatePostView.bind(this)}
+                        galleryClicked={this.showGalleryView.bind(this)}
+                        uploadPhotoClicked={this.showUploadPhotoView.bind(this)}
+                        myPostClicked={this.showMyPost.bind(this)}
                         logoutClicked={this.logout.bind(this)} />
                     <div id="loadingBox">Loading ...</div>
                     <div id="infoBox">Info</div>
@@ -46,6 +50,8 @@ export default class App extends Component {
             </div>
         );
     }
+
+
     handleAjaxError(event, response) {
         let errorMsg = JSON.stringify(response);
         if (response.readyState === 0)
@@ -70,7 +76,7 @@ export default class App extends Component {
         });
 
         // Initially load the "Home" view when the app starts
-        this.showGuestView();
+        this.showHomeView();
     }
     showInfo(message) {
         $('#infoBox').text(message).show();
@@ -90,24 +96,9 @@ export default class App extends Component {
     }
 
     showHomeView() {
-        KinveyRequester.findAllPosts()
-            .then(loadPostsSuccess.bind(this));
-        function loadPostsSuccess(posts) {
-            console.log(posts);
-            this.showView(<HomeView posts={posts}
-                                    username={this.state.username}/>);
-        }
+        this.showView(<HomeView username={this.state.username} />);
     }
 
-    showGuestView() {
-        KinveyRequester.findGuestPosts()
-            .then(loadPostsSuccess.bind(this));
-        function loadPostsSuccess(posts) {
-            console.log(posts);
-            this.showView(<HomeView posts={posts}
-                                    username={this.state.username}/>);
-        }
-    }
     showLoginView() {
         this.showView(<LoginView onsubmit={this.login.bind(this)} />);
     }
@@ -155,7 +146,7 @@ export default class App extends Component {
             .then(loadPostsSuccess.bind(this));
 
         function loadPostsSuccess(posts) {
-            this.showInfo("Books loaded.");
+            this.showInfo("Post loaded.");
             this.showView(
                 <PostsView
                     posts={posts}
@@ -167,6 +158,28 @@ export default class App extends Component {
             );
         }
     }
+
+    //List my Post here
+    showMyPost() {
+
+        KinveyRequester.findAllPosts()
+            .then(loadPostsSuccess.bind(this));
+
+        function loadPostsSuccess(posts) {
+            this.showInfo("Post loaded.");
+            this.showView(
+                <MyPostsView
+                    posts={posts}
+                    userId={this.state.userId}
+                    editPostClicked={this.preparePostForEdit.bind(this)}
+                    deletePostClicked={this.confirmPostDelete.bind(this)}
+                    viewDetailsClicked={this.showViewDetails.bind(this)}
+                />
+            )
+
+        }
+    }
+
     confirmPostDelete(postId) {
         KinveyRequester.findPostById(postId)
             .then(loadArticleForDeleteSuccess.bind(this));
@@ -188,7 +201,7 @@ export default class App extends Component {
             .then(deletePostSuccess.bind(this));
         function deletePostSuccess() {
             this.showPostsView();
-            this.showInfo("Book deleted.");
+            this.showInfo("Post deleted.");
         }
     }
 
@@ -203,7 +216,6 @@ export default class App extends Component {
             );
         }
     }
-
 
     preparePostForEdit(postId) {
         KinveyRequester.findPostById(postId)
@@ -228,10 +240,9 @@ export default class App extends Component {
 
         function editPostSuccess() {
             this.showPostsView();
-            this.showInfo("Book created.");
+            this.showInfo("Post edited.");
         }
     }
-
 
     createPost(title, author, description,imageUrl) {
         KinveyRequester.createPost(title, author, description,imageUrl)
@@ -239,18 +250,51 @@ export default class App extends Component {
 
         function createPostSuccess(data) {
             this.showPostsView();
-            this.showInfo("Book created.");
+            this.showInfo("Post created.");
         }
     }
     showCreatePostView() {
         this.showView(<CreatePostView onsubmit={this.createPost.bind(this)} />);
     }
 
+    showGalleryView() {
+        KinveyRequester.findAllPhotos()
+            .then(loadGallerySuccess.bind(this));
+
+        function loadGallerySuccess(cars) {
+            this.showInfo("Gallery loaded.");
+            this.showView(
+                <GalleryView
+                    cars={cars}
+                />
+            )
+        }
+
+    }
+
+    uploadPhoto(title, description, url) {
+        KinveyRequester.uploadPhoto(title, description, url)
+            .then(uploadPhotoSuccess.bind(this));
+
+        function uploadPhotoSuccess(data) {
+            this.showUploadPhotoView();
+            this.showInfo("Image uploaded.")
+            this.showGalleryView();
+        }
+
+    }
+
+
+    showUploadPhotoView() {
+        this.showView(<UploadPhotoView onsubmit={this.uploadPhoto.bind(this)} />);
+    }
+
+
     logout() {
         KinveyRequester.logoutUser();
         sessionStorage.clear();
         this.setState({username: null, userId: null});
-        this.showGuestView();
+        this.showHomeView();
         this.showInfo('Logout successful.');
     }
 }

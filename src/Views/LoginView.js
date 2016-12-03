@@ -19,6 +19,7 @@ export default class LoginView extends Component {
                     <input type="submit" value="Login" />
                 </div>
             </form>
+
         );
     }
 
