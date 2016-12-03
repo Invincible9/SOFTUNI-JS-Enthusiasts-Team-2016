@@ -8,7 +8,7 @@ export default class GalleryView extends Component {
                     <h2>{car.title}</h2>
                     {car.description}
 
-                <td><img  src={car.url} style={{width:'200px', height:'200px', margin:"20px"}}/></td>
+                <td><img  src={car.url} style={{width:'200px', height:'200px', margin:"20px"}} alt=""/></td>
 
             </tr>
         );
