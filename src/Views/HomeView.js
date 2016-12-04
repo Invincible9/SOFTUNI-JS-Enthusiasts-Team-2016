@@ -5,12 +5,28 @@ export default class HomeView extends Component {
             <article key={post._id}>
                 <header><h1>{post.title}</h1>
                     <div>{post.author}</div></header>
+                <hr/>
                 <div>{post.content}</div>
             </article>
         ).slice(0,6);
         return (
             <div className="home-view">
-                <h1>Home Page</h1>
+                <h1><span>Auto<span>Blog</span></span></h1>
+                <aside>
+                    <header className="recommended">
+                        <h3>5 Most Viewed Posts</h3>
+                    </header>
+                    <hr/>
+                    <div className="body">
+                        <ul className="list">
+                            <li><a href="#">Post1</a> </li>
+                            <li><a href="#">Post2</a> </li>
+                            <li><a href="#">Post3</a> </li>
+                            <li><a href="#">Post4</a> </li>
+                            <li><a href="#">Post5</a> </li>
+                        </ul>
+                    </div>
+                </aside>
                 <div className="home-posts-table">
                     {postsRows}
                 </div>
