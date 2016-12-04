@@ -4,7 +4,7 @@ export default class DeletePostView extends Component {
     render() {
         return (
             <form className="delete-book-form" onSubmit={this.submitForm.bind(this)}>
-                <h1>Confirm Post Book</h1>
+                <h1>Confirm Post</h1>
                 <label>
                     <div>Title:</div>
                     <input type="text" name="title" disabled
@@ -29,6 +29,6 @@ export default class DeletePostView extends Component {
 
     submitForm(event) {
         event.preventDefault();
-        this.props.onsubmit(this.props.bookId);
+        this.props.onsubmit(this.props.postId);//промених bookId на PostId
     }
 }

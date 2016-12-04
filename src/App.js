@@ -11,7 +11,7 @@ import EditPostView from './Views/EditPostView';
 import DeletePostView from './Views/DeletePostView';
 import PostsView from './Views/PostView';
 import PostDetails from './Views/PostDetailsView';
-import MyPostsView from './Views/MyPostsView';
+import MyPostsView from './Views/MyPostsView'
 import PostComment from './Views/AddPostCommentView';
 import KinveyRequester from './KinveyRequester';
 import GalleryView from './Views/GalleryView';
@@ -33,7 +33,7 @@ export default class App extends Component {
                 <header>
                     <NavigationBar
                         username={this.state.username}
-                        homeClicked={this.showHomeView.bind(this)}
+                        homeClicked={this.showGuestView.bind(this)}
                         loginClicked={this.showLoginView.bind(this)}
                         registerClicked={this.showRegisterView.bind(this)}
                         postsClicked={this.showPostsView.bind(this)}
@@ -42,6 +42,7 @@ export default class App extends Component {
                         uploadPhotoClicked={this.showUploadPhotoView.bind(this)}
                         myPostClicked={this.showMyPost.bind(this)}
                         logoutClicked={this.logout.bind(this)} />
+
                     <div id="loadingBox">Loading ...</div>
                     <div id="infoBox">Info</div>
                     <div id="errorBox">Error</div>
@@ -77,7 +78,8 @@ export default class App extends Component {
         });
 
         // Initially load the "Home" view when the app starts
-        this.showHomeView();
+        // this.showHomeView();
+        this.showGuestView();
     }
     showInfo(message) {
         $('#infoBox').text(message).show();
@@ -96,10 +98,15 @@ export default class App extends Component {
         $('#errorBox').hide();
     }
 
-    showHomeView() {
-        this.showView(<HomeView username={this.state.username} />);
-    }
 
+    showGuestView() {
+        KinveyRequester.findGuestPosts()
+            .then(loadPostsSuccess.bind(this));
+        function loadPostsSuccess(posts) {
+            this.showView(<HomeView posts={posts}
+                                    username={this.state.username}/>);
+        }
+    }
     showLoginView() {
         this.showView(<LoginView onsubmit={this.login.bind(this)} />);
     }
@@ -299,10 +306,11 @@ export default class App extends Component {
             this.showInfo("Post created.");
         }
     }
+
+    //Dancho
     showCreatePostView() {
         this.showView(<CreatePostView onsubmit={this.createPost.bind(this)} />);
     }
-
     showGalleryView() {
         KinveyRequester.findAllPhotos()
             .then(loadGallerySuccess.bind(this));
@@ -317,7 +325,6 @@ export default class App extends Component {
         }
 
     }
-
     uploadPhoto(title, description, url) {
         KinveyRequester.uploadPhoto(title, description, url)
             .then(uploadPhotoSuccess.bind(this));
@@ -329,18 +336,15 @@ export default class App extends Component {
         }
 
     }
-
-
     showUploadPhotoView() {
         this.showView(<UploadPhotoView onsubmit={this.uploadPhoto.bind(this)} />);
     }
-
 
     logout() {
         KinveyRequester.logoutUser();
         sessionStorage.clear();
         this.setState({username: null, userId: null});
-        this.showHomeView();
+        this.showGuestView();
         this.showInfo('Logout successful.');
     }
 }

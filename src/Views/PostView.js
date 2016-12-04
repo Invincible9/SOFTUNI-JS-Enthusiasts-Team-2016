@@ -52,43 +52,4 @@ export default class PostView extends Component {
                            onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
                 </td>);
         }
-
-
-
-
-
-    //     let postTable = this.props.posts.length > 3 ?
-    //         <thead>
-    //         <tr>
-    //             <th>Title</th>
-    //             <th>Author</th>
-    //             <th>Description</th>
-    //             <th>Actions</th>
-    //         </tr>
-    //         </thead>:"no post";
-    //     let postRows = this.props.posts.map(post =>
-    //         (post._acl.creator === sessionStorage.getItem('userId')) ?
-    //             <tr key={post._id}>
-    //                 <td>{post.title}</td>
-    //                 <td>{post.author}</td>
-    //                 <td>{post.description}</td>
-    //                 {this.getActions(post, this.props.userId)}
-    //             </tr> : null
-    //     );
-    //
-    //
-    //     return (
-    //         <div className="table-responsive">
-    //             <h1>posts</h1>
-    //             <table className="table">
-    //                 {postTable}
-    //                 <tbody>
-    //                 {postRows}
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     );
-    // }
-
-
 }

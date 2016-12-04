@@ -7,6 +7,7 @@ const KinveyRequester = (function() {
     const kinveyAppAuthHeaders = {
         'Authorization': "Basic " + btoa(appKey + ":" + appSecret),
     };
+    const _guestCredentials = 'ea334f5e-5719-4d63-bf93-9d9cbcd83fa9.WEiFXXETAvIVSfWQ9A/Il9v/7FC1ZSZmnBZDYG3A9qQ=';
 
     function loginUser(username, password) {
         return $.ajax({
@@ -39,14 +40,6 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders(),
         });
     }
-    // function findAllMyPosts() {
-    //     return $.ajax({
-    //         method: "GET",
-    //         url: baseUrl + "appdata/" + appKey + "/posts",
-    //         headers: getKinveyUserAuthHeaders()
-    //     });
-    //
-    // }
     function findAllPosts() {
         return $.ajax({
             method: "GET",
@@ -55,6 +48,13 @@ const KinveyRequester = (function() {
         });
     }
 
+    function findGuestPosts() {
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "appdata/" + appKey + "/posts",
+            headers: {'Authorization': "Kinvey " + _guestCredentials}
+        });
+    }
     function findPostById(postId) {
         return $.ajax({
             method: "GET",
@@ -62,15 +62,13 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders()
         });
     }
-
     function findSelectedPostComments(postId){
         return $.ajax({
             method: "GET",
-            url: baseUrl + "appdata/" + appKey + "/postComments/" + `?query={"postId":"${postId}"}`,
+            url: `${baseUrl}appdata/${appKey}/postComments/?query={"postId":"${postId}"}`,
             headers: getKinveyUserAuthHeaders()
         })
-    };
-
+    }
     function createPost(title, author, description,imageUrl,date) {
         return $.ajax({
             method: "POST",
@@ -79,7 +77,6 @@ const KinveyRequester = (function() {
             data: { title, author, description,imageUrl,date }
         });
     }
-
     function addPostComment(postId, comment, commentAuthor){
         return $.ajax({
             method: "POST",
@@ -89,7 +86,6 @@ const KinveyRequester = (function() {
             contentType: 'application/JSON'
         });
     }
-
     function editPost(bookId, title, author, description) {
         return $.ajax({
             method: "PUT",
@@ -106,7 +102,6 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders()
         });
     }
-
     function uploadPhoto(title, description, url) {
         return $.ajax({
             method: "POST",
@@ -124,10 +119,10 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders()
         });
     }
-
     return {
-        loginUser, registerUser, logoutUser, findSelectedPostComments, addPostComment,
-        findAllPosts, createPost, findPostById, editPost, deletePost, uploadPhoto, findAllPhotos
+        loginUser, registerUser, logoutUser,
+        findAllPosts, createPost, findPostById, editPost, deletePost,findGuestPosts,findSelectedPostComments,
+        addPostComment,uploadPhoto,findAllPhotos
     }
 })();
 

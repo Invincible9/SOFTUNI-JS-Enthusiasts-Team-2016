@@ -4,12 +4,9 @@ export default class GalleryView extends Component {
     render() {
         let carRows = this.props.cars.map(car =>
             <tr key={car._id} style={{float: 'left'}}>
-
-                    <h2>{car.title}</h2>
+                    <th>{car.title}</th>
                     {car.description}
-
                 <td><img  src={car.url} style={{width:'200px', height:'200px', margin:"20px"}} alt=""/></td>
-
             </tr>
         );
 
@@ -22,12 +19,7 @@ export default class GalleryView extends Component {
                     {carRows}
                     </tbody>
                 </table>
-
             </div>
-
-
         );
     }
-
-
 }
