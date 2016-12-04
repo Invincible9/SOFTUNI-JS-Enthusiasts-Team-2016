@@ -12,8 +12,8 @@ export default class CreatePostView extends Component {
                 </label>
                 <label>
                     <div>Author:</div>
-                    <input type="text" name="author" required
-                       ref={e => this.authorField = e} />
+                    <input type="text" name="author" disabled
+                           defaultValue={this.props.username} />
                 </label>
                 <label>
                     <div>Image:</div>
@@ -37,7 +37,7 @@ export default class CreatePostView extends Component {
         event.preventDefault();
         this.props.onsubmit(
             this.titleField.value,
-            this.authorField.value,
+            this.props.username,
             this.descriptionField.value,
             this.imageField.value,
         );

@@ -300,9 +300,13 @@ export default class App extends Component {
         }
     }
 
-    //Dancho
     showCreatePostView() {
-        this.showView(<CreatePostView onsubmit={this.createPost.bind(this)} />);
+        this.showView(
+            <CreatePostView
+                username={this.state.username}
+                onsubmit={this.createPost.bind(this)} 
+            />
+        );
     }
     showGalleryView() {
         KinveyRequester.findAllPhotos()
