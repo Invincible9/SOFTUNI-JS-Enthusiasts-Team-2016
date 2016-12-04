@@ -25,11 +25,7 @@ export default class AddPostCommentView extends Component {
     submitForm(event) {
         event.preventDefault();
         this.props.onsubmit(
-            this.props,
             this.props.post._id,
-            this.props.imageUrl,
-            this.props.description, // This is actually the current post content!!!
-            this.props.postAuthor,
             this.descriptionField.value,
             this.props.commentAuthor
         );

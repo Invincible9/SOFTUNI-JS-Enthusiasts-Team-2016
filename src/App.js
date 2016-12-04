@@ -195,7 +195,7 @@ export default class App extends Component {
             this.showView(
                 <DeletePostView
                     onsubmit={this.deletePost.bind(this)}
-                    bookId={post._id}
+                    postId={post._id}
                     title={post.title}
                     author={post.author}
                     description={post.description}
@@ -251,22 +251,15 @@ export default class App extends Component {
         }
     }
 
-    addCommentToDatabase(post, postId, postImgUrl, postContent, postAuthor, comment, commentAuthor){
+    addCommentToDatabase(postId, comment, commentAuthor){
         KinveyRequester.addPostComment(postId, comment, commentAuthor)
             .then(addPostCommentSuccess.bind(this))
 
         function addPostCommentSuccess(){
             KinveyRequester.findPostById(postId)
-                .then(this.showView(
-                    <PostDetails
-                        post={post}
-                        postId={postId}
-                        imageUrl={postImgUrl}
-                        author={postAuthor}
-                        content={postContent}
-                        addCommentClicked={this.showViewAddComment.bind(this)}
-                    />
-                ))
+                .then(this.showInfo('Comment added successful'))
+                .then(this.showViewDetails(postId))
+
         }
     }
 
