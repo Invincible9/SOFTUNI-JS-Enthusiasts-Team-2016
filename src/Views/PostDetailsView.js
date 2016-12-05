@@ -29,10 +29,14 @@ export default class PostDetailsView extends Component {
     }
 
     addComment(post, postId) {
-        return (
-            <input type="button" value="Add comment" className="btn btn-lg btn-primary btn-block"
-                   onClick={this.props.addCommentClicked.bind(this, postId)} />
-        );
+        if(sessionStorage.getItem('userId')) {
+            return (
+                <input type="button" value="Add comment" className="btn btn-lg btn-primary btn-block"
+                       onClick={this.props.addCommentClicked.bind(this, postId)}/>
+            );
+        } else {
+            return ('');
+        }
 
 
     }

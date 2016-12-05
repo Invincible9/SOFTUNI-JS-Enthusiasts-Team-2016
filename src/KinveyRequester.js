@@ -55,6 +55,23 @@ const KinveyRequester = (function() {
             headers: {'Authorization': "Kinvey " + _guestCredentials}
         });
     }
+
+    function findGuestPostById(postId) {
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "appdata/" + appKey + "/posts/" + postId,
+            headers: {'Authorization': "Kinvey " + _guestCredentials}
+        });
+    }
+
+    function findGuestSelectedPostComments(postId){
+        return $.ajax({
+            method: "GET",
+            url: `${baseUrl}appdata/${appKey}/postComments/?query={"postId":"${postId}"}`,
+            headers: {'Authorization': "Kinvey " + _guestCredentials}
+        })
+    }
+
     function findPostById(postId) {
         return $.ajax({
             method: "GET",
@@ -129,7 +146,7 @@ const KinveyRequester = (function() {
         });
     }
     return {
-        loginUser, registerUser, logoutUser, deletePostComments,
+        loginUser, registerUser, logoutUser, deletePostComments, findGuestPostById, findGuestSelectedPostComments,
         findAllPosts, createPost, findPostById, editPost, deletePost,findGuestPosts,findSelectedPostComments,
         addPostComment,uploadPhoto,findAllPhotos
     }

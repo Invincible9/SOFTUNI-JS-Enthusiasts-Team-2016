@@ -3,10 +3,12 @@ export default class HomeView extends Component {
     render() {
         let postsRows = this.props.posts.map(post =>
             <article key={post._id}>
-                <header><h1>{post.title}</h1>
-                    <p>Posted by: {post.author}</p></header>
+                <h1>{this.getActions(post, this.props.userId)}</h1>
+
+                    <p>Posted by: {post.author}</p>
                 <hr/>
                 <p>{post.description}</p>
+                <p className="date">{post.date.slice(0,24)}</p>
             </article>
         ).slice(0,6);
         return (
@@ -33,4 +35,14 @@ export default class HomeView extends Component {
             </div>
         );
     }
+
+    getActions(post, userId) {
+        return (
+
+                <a href="#"  onClick={this.props.postTitleClicked.bind(this, post._id)}>{post.title}</a>
+        )
+
+    }
+
+
 }

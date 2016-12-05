@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import '../styles/Forms-Style.css'
-
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 export default class LoginView extends Component {
     render() {
         return (

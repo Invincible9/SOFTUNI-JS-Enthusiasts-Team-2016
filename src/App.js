@@ -101,10 +101,23 @@ export default class App extends Component {
         KinveyRequester.findGuestPosts()
             .then(loadPostsSuccess.bind(this));
         function loadPostsSuccess(posts) {
-            this.showView(<HomeView posts={posts}
-                                    username={this.state.username}/>);
+            function sortFunction(a, b){
+                let dateA = new Date(a.date).getTime();
+                let dateB = new Date(b.date).getTime();
+                return Number(dateA) < Number(dateB) ? 1 : -1;
+            }
+
+            posts.map(post => post.description.length > 200 ?
+                post.description = post.description.slice(0,200) + '...' :
+                '');
+
+            this.showView(<HomeView posts={posts.sort(sortFunction)}
+                                    username={this.state.username}
+                                    postTitleClicked={this.showViewDetails.bind(this)}
+            />);
         }
     }
+
     showLoginView() {
         this.showView(<LoginView onsubmit={this.login.bind(this)} />);
     }
@@ -230,10 +243,18 @@ export default class App extends Component {
     }
 
     showViewDetails(postId) {
-        let selectedPostRequest = KinveyRequester.findPostById(postId);
-        let selectedPostCommentsRequest = KinveyRequester.findSelectedPostComments(postId);
-        Promise.all([selectedPostRequest, selectedPostCommentsRequest])
-            .then(details.bind(this))
+        if(!this.state.username) {
+            let selectedPostRequest = KinveyRequester.findGuestPostById(postId)
+            let selectedPostCommentsRequest = KinveyRequester.findGuestSelectedPostComments(postId);
+            Promise.all([selectedPostRequest, selectedPostCommentsRequest])
+                .then(details.bind(this))
+        } else {
+            let selectedPostRequest = KinveyRequester.findPostById(postId);
+            let selectedPostCommentsRequest = KinveyRequester.findSelectedPostComments(postId);
+            Promise.all([selectedPostRequest, selectedPostCommentsRequest])
+                .then(details.bind(this))
+        }
+
 
         function details([post, comments]) {
             this.showView(<PostDetails
