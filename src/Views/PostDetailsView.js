@@ -1,20 +1,5 @@
-// import React, { Component } from 'react';
-//
-// export default class PostDetailsView extends Component {
-//     render() {
-//         return (
-//             <div className="details-view">
-//                 <h1>Author: {this.props.author}</h1>
-//                 <img src={this.props.imageUrl} alt=""/>
-//                 <p>Content: {this.props.content}</p>
-//             </div>
-//         );
-//     }
-// }
-
-
 import React, { Component } from 'react';
-
+import '../styles/PostDetailsView.css'
 export default class PostDetailsView extends Component {
     render() {
         let commentsRow;
@@ -31,13 +16,13 @@ export default class PostDetailsView extends Component {
 
         return (
             <div className="details-view">
-                <h1>Post author: {this.props.author}</h1>
+                <h1>{this.props.title}</h1>
+                <div>Posted by: {this.props.author}</div>
                 <img src={this.props.imageUrl} alt=""/>
-                <p>Post content: {this.props.content}</p>
+                <p><span className="postContent">Post content:</span> {this.props.content}</p>
                 <div>
                     {commentsRow}
                 </div>
-
                 {this.addComment(this.props.post, this.props.postId)}
             </div>
         );
@@ -45,7 +30,7 @@ export default class PostDetailsView extends Component {
 
     addComment(post, postId) {
         return (
-            <input type="button" value="Add comment"
+            <input type="button" value="Add comment" className="btn btn-lg btn-primary btn-block"
                    onClick={this.props.addCommentClicked.bind(this, postId)} />
         );
 

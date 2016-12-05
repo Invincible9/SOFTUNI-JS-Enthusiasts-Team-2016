@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
-// import '../../node_modules/bootstrap/dist/css/bootstrap.css'
-
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 export default class PostView extends Component {
     render() {
         let postRows = this.props.posts.map(post =>
@@ -15,41 +14,44 @@ export default class PostView extends Component {
         );
 
         return (
-            <div className="table-responsive">
-                <h1>posts</h1>
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {postRows}
-                    </tbody>
-                </table>
+            <div className="container">
+                <div className="table-responsive">
+                    <h1>Posts</h1>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <th>Title:</th>
+                            <th>Description:</th>
+                            <th>Posted by:</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {postRows}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         );
     }
-        getActions(post, userId) {
-            if (post._acl.creator === userId)
-                return (
-                    <td>
-                        <input type="button" value="Edit"
-                               onClick={this.props.editPostClicked.bind(this, post._id)}/>
-                        &nbsp;
-                        <input type="button" value="Delete"
-                               onClick={this.props.deletePostClicked.bind(this, post._id)}/>
-                        <input type="button" value="Details"
-                               onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
-                    </td>
-                );
-            else
-                return (<td>
-                    <input type="button" value="Details"
+
+    getActions(post, userId) {
+        if (post._acl.creator === userId)
+            return (
+                <td>
+                    <input type="button" value="Edit"  className="btn btn-lg btn-primary btn-block"
+                           onClick={this.props.editPostClicked.bind(this, post._id)}/>
+                    &nbsp;
+                    <input type="button" value="Delete"  className="btn btn-lg btn-primary btn-block"
+                           onClick={this.props.deletePostClicked.bind(this, post._id)}/>
+                    <input type="button" value="Details"  className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
-                </td>);
-        }
+                </td>
+            );
+        else
+            return (<td>
+                <input type="button" value="Details" className="btn btn-lg btn-primary btn-block"
+                       onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
+            </td>);
+    }
 }

@@ -86,19 +86,19 @@ const KinveyRequester = (function() {
             contentType: 'application/JSON'
         });
     }
-    function editPost(bookId, title, author, description) {
+    function editPost(postId, title, author, description) {
         return $.ajax({
             method: "PUT",
-            url: baseUrl + "appdata/" + appKey + "/posts/" + bookId,
+            url: baseUrl + "appdata/" + appKey + "/posts/" + postId,
             headers: getKinveyUserAuthHeaders(),
-            data: { title, author, description }
+            data: { title, author, description } // add url
         });
     }
 
-    function deletePost(bookId) {
+    function deletePost(postId) {
         return $.ajax({
             method: "DELETE",
-            url: baseUrl + "appdata/" + appKey + "/posts/" + bookId,
+            url: baseUrl + "appdata/" + appKey + "/posts/" + postId,
             headers: getKinveyUserAuthHeaders()
         });
     }

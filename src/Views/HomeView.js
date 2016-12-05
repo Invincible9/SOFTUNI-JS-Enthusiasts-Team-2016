@@ -4,9 +4,9 @@ export default class HomeView extends Component {
         let postsRows = this.props.posts.map(post =>
             <article key={post._id}>
                 <header><h1>{post.title}</h1>
-                    <div>{post.author}</div></header>
+                    <p>Posted by: {post.author}</p></header>
                 <hr/>
-                <div>{post.content}</div>
+                <p>{post.description}</p>
             </article>
         ).slice(0,6);
         return (

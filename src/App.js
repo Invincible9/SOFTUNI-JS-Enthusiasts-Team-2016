@@ -42,7 +42,6 @@ export default class App extends Component {
                         uploadPhotoClicked={this.showUploadPhotoView.bind(this)}
                         myPostClicked={this.showMyPost.bind(this)}
                         logoutClicked={this.logout.bind(this)} />
-
                     <div id="loadingBox">Loading ...</div>
                     <div id="infoBox">Info</div>
                     <div id="errorBox">Error</div>
@@ -52,7 +51,6 @@ export default class App extends Component {
             </div>
         );
     }
-
 
     handleAjaxError(event, response) {
         let errorMsg = JSON.stringify(response);
@@ -175,9 +173,11 @@ export default class App extends Component {
 
         function loadPostsSuccess(posts) {
             this.showInfo("Post loaded.");
+
+            let myPosts = posts.filter(post => (post._acl.creator === sessionStorage.getItem('userId')));
             this.showView(
                 <MyPostsView
-                    posts={posts}
+                    posts={myPosts}
                     userId={this.state.userId}
                     editPostClicked={this.preparePostForEdit.bind(this)}
                     deletePostClicked={this.confirmPostDelete.bind(this)}
@@ -225,6 +225,7 @@ export default class App extends Component {
                     post={post}
                     postId={post._id}
                     imageUrl={post.imageUrl}
+                    title={post.title}
                     author={post.author}
                     content={post.description}
                     addCommentClicked={this.showViewAddComment.bind(this)}

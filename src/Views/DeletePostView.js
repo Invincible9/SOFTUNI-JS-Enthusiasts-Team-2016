@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class DeletePostView extends Component {
     render() {
         return (
-            <form className="delete-book-form" onSubmit={this.submitForm.bind(this)}>
+            <form className="delete-post-form" onSubmit={this.submitForm.bind(this)}>
                 <h1>Confirm Post</h1>
                 <label>
                     <div>Title:</div>

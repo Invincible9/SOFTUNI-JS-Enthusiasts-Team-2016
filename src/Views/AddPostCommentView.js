@@ -3,20 +3,20 @@ import React, { Component } from 'react';
 export default class AddPostCommentView extends Component {
     render() {
         return (
-            <form className="edit-book-form" onSubmit={this.submitForm.bind(this)}>
+            <form className="add-post-comment-form" onSubmit={this.submitForm.bind(this)}>
                 <h1>Add post comment</h1>
-                <div><strong>Title: </strong>{this.props.title}</div><br/>
-                <div><strong>Content: </strong>{this.props.description}</div><br/>
-                <div><strong>Author: </strong>{this.props.postAuthor}</div><br/>
+                <h1>Title: {this.props.title}</h1><br/>
+                <div><span className="postContent">Content: </span>{this.props.description}</div><br/>
+                <div><span className="postContent">Author: </span>{this.props.postAuthor}</div><br/>
 
                 <label>
-                    <div><strong>Comment:</strong></div>
-                    <textarea name="description" rows="10"
-                              defaultValue={''}
-                              ref={e => this.descriptionField = e} />
+                    <div><span className="postContent">Comment: </span></div>
+
+                    <textarea type="text" className="add-comment" placeholder="Add Comment" rows="20" cols="40" required
+                              ref={e => this.descriptionField = e} autoFocus />
                 </label>
                 <div>
-                    <input type="submit" value="Add" />
+                    <button className="btn btn-lg btn-primary btn-add" type="submit">Add</button>
                 </div>
             </form>
         );
