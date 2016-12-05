@@ -4,7 +4,7 @@ export default class DeletePostView extends Component {
     render() {
         return (
             <form className="delete-post-form" onSubmit={this.submitForm.bind(this)}>
-                <h1>Confirm Post</h1>
+                <h1>Confirm - Delete Post</h1>
                 <label>
                     <div>Title:</div>
                     <input type="text" name="title" disabled
@@ -20,6 +20,11 @@ export default class DeletePostView extends Component {
                     <textarea name="description" rows="10" disabled
                               defaultValue={this.props.description} />
                 </label>
+                <div>
+                    <br/>
+                        <font color="red">Please be informed that all comments related to that post will be deleted!!!</font>
+                    <br/><br/>
+                </div>
                 <div>
                     <input type="submit" value="Delete" />
                 </div>

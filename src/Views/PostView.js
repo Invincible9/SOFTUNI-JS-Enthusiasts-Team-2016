@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-//import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 export default class PostView extends Component {
     render() {
         let postRows = this.props.posts.map(post =>

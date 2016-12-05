@@ -218,7 +218,10 @@ export default class App extends Component {
     }
 
     deletePost(postId) {
-        KinveyRequester.deletePost(postId)
+        let deletePostCommentsRequest = KinveyRequester.deletePostComments(postId);
+        let deletePostRequest = KinveyRequester.deletePost(postId);
+
+        Promise.all([deletePostCommentsRequest, deletePostRequest])
             .then(deletePostSuccess.bind(this));
         function deletePostSuccess() {
             this.showPostsView();

@@ -102,6 +102,15 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders()
         });
     }
+
+    function deletePostComments(postId){
+        return $.ajax({
+            method: "DELETE",
+            url:`${baseUrl}appdata/${appKey}/postComments/?query={"postId":"${postId}"}`,
+            headers: getKinveyUserAuthHeaders()
+        });
+    }
+
     function uploadPhoto(title, description, url) {
         return $.ajax({
             method: "POST",
@@ -120,7 +129,7 @@ const KinveyRequester = (function() {
         });
     }
     return {
-        loginUser, registerUser, logoutUser,
+        loginUser, registerUser, logoutUser, deletePostComments,
         findAllPosts, createPost, findPostById, editPost, deletePost,findGuestPosts,findSelectedPostComments,
         addPostComment,uploadPhoto,findAllPhotos
     }

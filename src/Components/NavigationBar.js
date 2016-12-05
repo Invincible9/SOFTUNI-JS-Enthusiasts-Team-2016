@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './NavigationBar.css';
-//import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 
 
 export default class NavigationBar extends Component {
