@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
 import NavigationBar from './Components/NavigationBar';
@@ -16,6 +16,19 @@ import PostComment from './Views/AddPostCommentView';
 import KinveyRequester from './KinveyRequester';
 import GalleryView from './Views/GalleryView';
 import UploadPhotoView from './Views/UploadPhotoView';
+
+//ADMIN
+import UsersView from './ViewsAdmin/UsersView';
+import ViewDetailsUserClicked from './ViewsAdmin/ViewDetailsUserClicked';
+import EditUserView from './ViewsAdmin/EditUserView';
+import DeleteUserView from './ViewsAdmin/DeleteUserView';
+
+//MODERATOR
+import ModeratorUsersView from './ViewsModerator/ModeratorUsersView';
+import ViewDetailsUserClickedByModerator from './ViewsModerator/ViewDetailsUserClickedByModerator';
+import ModeratorEditUserView from './ViewsModerator/ModeratorEditUserView';
+import ModeratorDeleteUserView from './ViewsModerator/ModeratorDeleteUserView';
+
 import $ from 'jquery';
 
 export default class App extends Component {
@@ -41,7 +54,9 @@ export default class App extends Component {
                         galleryClicked={this.showGalleryView.bind(this)}
                         uploadPhotoClicked={this.showUploadPhotoView.bind(this)}
                         myPostClicked={this.showMyPost.bind(this)}
-                        logoutClicked={this.logout.bind(this)} />
+                        adminListUsersClicked={this.showUsersView.bind(this)}
+                        moderatorListUsersClicked={this.showModeratorUsersView.bind(this)}
+                        logoutClicked={this.logout.bind(this)}/>
                     <div id="loadingBox">Loading ...</div>
                     <div id="infoBox">Info</div>
                     <div id="errorBox">Error</div>
@@ -60,18 +75,23 @@ export default class App extends Component {
             errorMsg = response.responseJSON.description;
         this.showError(errorMsg);
     }
+
     componentDidMount() {
         // Attach global AJAX "loading" event handlers
         $(document).on({
-            ajaxStart: function() { $("#loadingBox").show() },
-            ajaxStop: function() { $("#loadingBox").hide() }
+            ajaxStart: function () {
+                $("#loadingBox").show()
+            },
+            ajaxStop: function () {
+                $("#loadingBox").hide()
+            }
         });
 
         // Attach a global AJAX error handler
         $(document).ajaxError(this.handleAjaxError.bind(this));
 
         // Hide the info / error boxes when clicked
-        $("#infoBox, #errorBox").click(function() {
+        $("#infoBox, #errorBox").click(function () {
             $(this).fadeOut();
         });
 
@@ -79,9 +99,10 @@ export default class App extends Component {
         // this.showHomeView();
         this.showGuestView();
     }
+
     showInfo(message) {
         $('#infoBox').text(message).show();
-        setTimeout(function() {
+        setTimeout(function () {
             $('#infoBox').fadeOut();
         }, 3000);
     }
@@ -101,14 +122,14 @@ export default class App extends Component {
         KinveyRequester.findGuestPosts()
             .then(loadPostsSuccess.bind(this));
         function loadPostsSuccess(posts) {
-            function sortFunction(a, b){
+            function sortFunction(a, b) {
                 let dateA = new Date(a.date).getTime();
                 let dateB = new Date(b.date).getTime();
                 return Number(dateA) < Number(dateB) ? 1 : -1;
             }
 
             posts.map(post => post.description.length > 200 ?
-                post.description = post.description.slice(0,200) + '...' :
+                post.description = post.description.slice(0, 200) + '...' :
                 '');
 
             this.showView(<HomeView posts={posts.sort(sortFunction)}
@@ -119,44 +140,61 @@ export default class App extends Component {
     }
 
     showLoginView() {
-        this.showView(<LoginView onsubmit={this.login.bind(this)} />);
+        this.showView(<LoginView onsubmit={this.login.bind(this)}/>);
     }
 
+    /// TODO HERE
     login(username, password) {
         KinveyRequester.loginUser(username, password)
             .then(loginSuccess.bind(this));
 
         function loginSuccess(userInfo) {
-            this.saveAuthInSession(userInfo);
-            this.showPostsView();
-            this.showInfo("Login successful.");
+            if (userInfo.isDeleted !== "true") {
+                this.saveAuthInSession(userInfo);
+                this.showPostsView();
+                this.showInfo("Login successful.");
+            }
         }
     }
 
     showRegisterView() {
-        this.showView(<RegisterView onsubmit={this.register.bind(this)} />);
+        this.showView(<RegisterView onsubmit={this.register.bind(this)}/>);
     }
 
-    register(username, password) {
-        KinveyRequester.registerUser(username, password)
-            .then(registerSuccess.bind(this));
+    /// TODO HERE
+    register(username, password, repeat, fullname, roles, isDeleted) {
+            if(password !== repeat){
+                this.showError("Password did not match");
+                return;
+            }
 
-        function registerSuccess(userInfo) {
-            this.saveAuthInSession(userInfo);
-            this.showPostsView();
-            this.showInfo("User registration successful.");
-        }
+            KinveyRequester.registerUser(username, password, repeat, fullname, roles, isDeleted)
+                .then(registerSuccess.bind(this))
+
+            function registerSuccess(userInfo) {
+                this.saveAuthInSession(userInfo);
+                this.showPostsView();
+                this.showInfo("User registration successful.");
+            }
+
     }
 
+    /// TODO HERE
     saveAuthInSession(userInfo) {
         sessionStorage.setItem('authToken', userInfo._kmd.authtoken);
         sessionStorage.setItem('userId', userInfo._id);
         sessionStorage.setItem('username', userInfo.username);
+        sessionStorage.setItem('roles', userInfo.roles);
+        sessionStorage.setItem('fullname', userInfo.fullname);
+        sessionStorage.setItem('isDeleted', userInfo.isDeleted);
 
         // This will update the entire app UI (e.g. the navigation bar)
         this.setState({
             username: userInfo.username,
-            userId: userInfo._id
+            userId: userInfo._id,
+            roles: userInfo.roles,
+            fullname: userInfo.fullname,
+            isDeleted: userInfo.isDeleted
         });
     }
 
@@ -166,7 +204,7 @@ export default class App extends Component {
 
         function loadPostsSuccess(posts) {
             //Function for sorting posts by date in descending order!!!
-            function sortFunction(a, b){
+            function sortFunction(a, b) {
                 let dateA = new Date(a.date).getTime();
                 let dateB = new Date(b.date).getTime();
                 return Number(dateA) < Number(dateB) ? 1 : -1;
@@ -176,8 +214,8 @@ export default class App extends Component {
 
             //Cutting all posts length higher than 200 symbols!!!
             posts.map(post => post.description.length > 200 ?
-            post.description = post.description.slice(0,200) + '...' :
-            '');
+                post.description = post.description.slice(0, 200) + '...' :
+                '');
 
             this.showView(
                 <PostsView
@@ -243,7 +281,7 @@ export default class App extends Component {
     }
 
     showViewDetails(postId) {
-        if(!this.state.username) {
+        if (!this.state.username) {
             let selectedPostRequest = KinveyRequester.findGuestPostById(postId)
             let selectedPostCommentsRequest = KinveyRequester.findGuestSelectedPostComments(postId);
             Promise.all([selectedPostRequest, selectedPostCommentsRequest])
@@ -289,11 +327,11 @@ export default class App extends Component {
         }
     }
 
-    addCommentToDatabase(postId, comment, commentAuthor){
+    addCommentToDatabase(postId, comment, commentAuthor) {
         KinveyRequester.addPostComment(postId, comment, commentAuthor)
             .then(addPostCommentSuccess.bind(this))
 
-        function addPostCommentSuccess(){
+        function addPostCommentSuccess() {
             KinveyRequester.findPostById(postId)
                 .then(this.showInfo('Comment added successful'))
                 .then(this.showViewDetails(postId))
@@ -328,8 +366,8 @@ export default class App extends Component {
         }
     }
 
-    createPost(title, author, description,imageUrl) {
-        KinveyRequester.createPost(title, author, description,imageUrl, new Date())
+    createPost(title, author, description, imageUrl) {
+        KinveyRequester.createPost(title, author, description, imageUrl, new Date())
             .then(createPostSuccess.bind(this));
 
         function createPostSuccess(data) {
@@ -342,10 +380,11 @@ export default class App extends Component {
         this.showView(
             <CreatePostView
                 username={this.state.username}
-                onsubmit={this.createPost.bind(this)} 
+                onsubmit={this.createPost.bind(this)}
             />
         );
     }
+
     showGalleryView() {
         KinveyRequester.findAllPhotos()
             .then(loadGallerySuccess.bind(this));
@@ -358,8 +397,8 @@ export default class App extends Component {
                 />
             )
         }
-
     }
+
     uploadPhoto(title, description, url) {
         KinveyRequester.uploadPhoto(title, description, url)
             .then(uploadPhotoSuccess.bind(this));
@@ -371,8 +410,9 @@ export default class App extends Component {
         }
 
     }
+
     showUploadPhotoView() {
-        this.showView(<UploadPhotoView onsubmit={this.uploadPhoto.bind(this)} />);
+        this.showView(<UploadPhotoView onsubmit={this.uploadPhoto.bind(this)}/>);
     }
 
     logout() {
@@ -382,4 +422,195 @@ export default class App extends Component {
         this.showGuestView();
         this.showInfo('Logout successful.');
     }
+
+    /// TODO ALL FROM HERE
+    //showModeratorView
+    showModeratorUsersView() {
+        KinveyRequester.findAllUsers()
+            .then(loadUsersSuccess.bind(this));
+
+        function loadUsersSuccess(users) {
+            this.showInfo("Users loaded.");
+            this.showView(
+                <ModeratorUsersView
+                    users={users}
+                    userId={this.state.userId}
+                    editModeratorUserClicked={this.prepareUserForEditByModerator.bind(this)}
+                    deleteModeratorUserClicked={this.confirmUserDeleteByModerator.bind(this)}
+                    viewModeratorUserDetailsClicked={this.showUserViewDetailsByAdmin.bind(this)}
+                />
+            );
+        }
+    }
+
+    showUsersView() {
+        KinveyRequester.findAllUsers()
+            .then(loadUsersSuccess.bind(this));
+
+        function loadUsersSuccess(users) {
+            this.showInfo("Users loaded.");
+            this.showView(
+                <UsersView
+                    users={users}
+                    userId={this.state.userId}
+                    editUserClicked={this.prepareUserForEdit.bind(this)}
+                    deleteUserClicked={this.confirmUserDelete.bind(this)}
+                    viewUserDetailsClicked={this.showUserViewDetails.bind(this)}
+                />
+            );
+        }
+    }
+
+
+    //// TODO DELETE ALL USERS BY MODERATOR
+
+    confirmUserDeleteByModerator(userId) {
+        KinveyRequester.findUserById(userId)
+            .then(loadUserForDeleteSuccess.bind(this));
+        function loadUserForDeleteSuccess(user) {
+            this.showView(
+                <ModeratorDeleteUserView
+                    onsubmit={this.deleteUser.bind(this)}
+                    userId={user._id}
+                    username={user.username}
+                    repeat={user.repeat}
+                    fullname={user.fullname}
+                    roles={user.roles}
+                    isDeleted={user.isDeleted}
+                />
+            );
+        }
+    }
+
+
+    //// TODO DELETE USER BY ADMIN
+    confirmUserDelete(userId) {
+        KinveyRequester.findUserById(userId)
+            .then(loadUserForDeleteSuccess.bind(this));
+        function loadUserForDeleteSuccess(user) {
+            this.showView(
+                <DeleteUserView
+                    onsubmit={this.deleteUser.bind(this)}
+                    userId={user._id}
+                    username={user.username}
+                    repeat={user.repeat}
+                    fullname={user.fullname}
+                    roles={user.roles}
+                    isDeleted={user.isDeleted}
+                />
+            );
+        }
+    }
+
+
+    deleteUser(userId, username, repeat, fullname, roles, isDeleted) {
+        KinveyRequester.deleteUser(userId, username, repeat, fullname, roles, isDeleted)
+            .then(deleteUserSuccess.bind(this));
+        function deleteUserSuccess(data) {
+            if (sessionStorage.getItem('roles') === "moderator") {
+                this.showModeratorUsersView();
+            } else {
+                this.showUsersView();
+            }
+
+            this.showInfo("User deleted.");
+        }
+    }
+
+
+    ///// TODO DETAILS USERS MODERATOR
+    showUserViewDetailsByAdmin(userId) {
+        KinveyRequester.findUserById(userId).then(details.bind(this));
+        function details(dataSuccess) {
+            this.showView(
+                <ViewDetailsUserClickedByModerator
+                    username={dataSuccess.username}
+                    fullname={dataSuccess.fullname}
+                    roles={dataSuccess.roles}
+                    isDeleted={dataSuccess.isDeleted}
+                />
+            );
+        }
+    }
+
+
+    ///// TODO DETAILS USERS ADMIN
+    showUserViewDetails(user) {
+        KinveyRequester.findUserById(user).then(details.bind(this));
+        function details(dataSuccess) {
+            this.showView(
+                <ViewDetailsUserClicked
+                    username={dataSuccess.username}
+                    fullname={dataSuccess.fullname}
+                    roles={dataSuccess.roles}
+                    isDeleted={dataSuccess.isDeleted}
+                />
+            );
+        }
+    }
+
+
+    //////// TODO EDIT MODERATOR
+    prepareUserForEditByModerator(userId) {
+
+        KinveyRequester.findUserById(userId)
+            .then(loadUserForEditSuccess.bind(this));
+
+        function loadUserForEditSuccess(userInfo) {
+            this.showView(
+                <ModeratorEditUserView
+                    onsubmit={this.editUser.bind(this)}
+                    userId={userInfo._id}
+                    username={userInfo.username}
+                    password={userInfo.password}
+                    repeat={userInfo.repeat}
+                    fullname={userInfo.fullname}
+                    roles={userInfo.roles}
+                    isDeleted={userInfo.isDeleted}
+                />
+            );
+        }
+    }
+
+    // /////////// TODO EDIT ADMIN
+    prepareUserForEdit(userId) {
+        KinveyRequester.findUserById(userId)
+            .then(loadUserForEditSuccess.bind(this));
+
+        function loadUserForEditSuccess(userInfo) {
+            this.showView(
+                <EditUserView
+                    onsubmit={this.editUser.bind(this)}
+                    userId={userInfo._id}
+                    username={userInfo.username}
+                    password={userInfo.password}
+                    repeat={userInfo.repeat}
+                    fullname={userInfo.fullname}
+                    roles={userInfo.roles}
+                    isDeleted={userInfo.isDeleted}
+                />
+            );
+        }
+    }
+
+
+    editUser(userId, username, password, repeat, fullname, roles, isDeleted) {
+        if(password !== repeat){
+            this.showError("Password did not match");
+            return;
+        }
+
+        KinveyRequester.editUser(userId, username, password, repeat, fullname, roles, isDeleted)
+            .then(editUserSuccess.bind(this));
+
+        function editUserSuccess(info) {
+            if (sessionStorage.getItem('roles') === "moderator") {
+                this.showModeratorUsersView();
+            } else {
+                this.showUsersView();
+            }
+            this.showInfo("User edited.");
+        }
+    }
+
 }

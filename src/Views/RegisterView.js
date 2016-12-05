@@ -13,8 +13,14 @@ export default class RegisterView extends Component {
                             <form className="form-signin" onSubmit={this.submitForm.bind(this)}>
                                 <input type="text" className="form-control" placeholder="Username" required
                                        ref={e => this.usernameField = e} autoFocus/>
-                                <input type="password" className="form-control" placeholder="Password" required
+                                <input type="password" id="password" className="form-control" placeholder="Password"
+                                       required
                                        ref={e => this.passwordField = e}/>
+                                <input type="password" id="repeat" className="form-control" placeholder="Repeat"
+                                       required
+                                       ref={e => this.repeatField = e}/>
+                                <input type="text" className="form-control" placeholder="FullName" required
+                                       ref={e => this.fullnameField = e}/>
                                 <button className="btn btn-lg btn-primary btn-block" type="Register">Register</button>
                             </form>
                         </div>
@@ -26,6 +32,13 @@ export default class RegisterView extends Component {
     submitForm(event) {
         event.preventDefault();
         this.props.onsubmit(
-            this.usernameField.value, this.passwordField.value);
+
+            this.usernameField.value,
+            this.passwordField.value,
+            this.repeatField.value,
+            this.fullnameField.value,
+            "user",
+            "false"
+        );
     }
 }

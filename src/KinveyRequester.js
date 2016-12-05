@@ -9,21 +9,21 @@ const KinveyRequester = (function() {
     };
     const _guestCredentials = 'ea334f5e-5719-4d63-bf93-9d9cbcd83fa9.WEiFXXETAvIVSfWQ9A/Il9v/7FC1ZSZmnBZDYG3A9qQ=';
 
-    function loginUser(username, password) {
+    function loginUser(username, password, isDeleted) {
         return $.ajax({
             method: "POST",
             url: baseUrl + "user/" + appKey + "/login",
             headers: kinveyAppAuthHeaders,
-            data: { username, password }
+            data: { username, password, isDeleted }
         });
     }
 
-    function registerUser(username, password) {
+    function registerUser(username, password, repeat, fullname, roles, isDeleted) {
         return $.ajax({
             method: "POST",
             url: baseUrl + "user/" + appKey + "/",
             headers: kinveyAppAuthHeaders,
-            data: { username, password }
+            data: { username, password, repeat, fullname, roles, isDeleted }
         });
     }
 
@@ -40,6 +40,50 @@ const KinveyRequester = (function() {
             headers: getKinveyUserAuthHeaders(),
         });
     }
+
+    function findAllUsers() {
+        return $.ajax({
+            method: "GET",
+            //https://baas.kinvey.com/user/kid_rkAs_Gg7x/
+            url: baseUrl + "user/" + appKey,
+            headers: getKinveyUserAuthHeaders()
+        });
+    }
+
+    function findAllPostsByAdmin() {
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "appdata/" + appKey + "/posts",
+            headers: getKinveyUserAuthHeaders()
+        });
+    }
+
+    function findUserById(userId) {
+        return $.ajax({
+            method: "GET",
+            url: baseUrl + "user/" + appKey + "/" + userId,
+            headers: getKinveyUserAuthHeaders()
+        });
+    }
+
+    function editUser(userId, username, password, repeat, fullname, roles, isDeleted) {
+        return $.ajax({
+            method: "PUT",
+            url: baseUrl + "user/" + appKey + "/" + userId,
+            headers: getKinveyUserAuthHeaders(),
+            data: {username, repeat, password, fullname, roles, isDeleted }
+        });
+    }
+
+    function deleteUser(userId, username, repeat, fullname, roles, isDeleted) {
+        return $.ajax({
+            method: "PUT",
+            url: baseUrl + "user/" + appKey + "/" + userId,
+            headers: getKinveyUserAuthHeaders(),
+            data: { username, repeat, fullname, roles, isDeleted }
+        });
+    }
+
     function findAllPosts() {
         return $.ajax({
             method: "GET",
@@ -148,7 +192,8 @@ const KinveyRequester = (function() {
     return {
         loginUser, registerUser, logoutUser, deletePostComments, findGuestPostById, findGuestSelectedPostComments,
         findAllPosts, createPost, findPostById, editPost, deletePost,findGuestPosts,findSelectedPostComments,
-        addPostComment,uploadPhoto,findAllPhotos
+        addPostComment,uploadPhoto,findAllPhotos, findAllUsers, findAllPostsByAdmin, editUser, findUserById,
+        deleteUser,
     }
 })();
 
