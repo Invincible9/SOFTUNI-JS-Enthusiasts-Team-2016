@@ -3,32 +3,31 @@ import React, { Component } from 'react';
 export default class DeletePostView extends Component {
     render() {
         return (
-            <form className="delete-post-form" onSubmit={this.submitForm.bind(this)}>
-                <h1>Confirm - Delete Post</h1>
-                <label>
-                    <div>Title:</div>
-                    <input type="text" name="title" disabled
-                           defaultValue={this.props.title} />
-                </label>
-                <label>
-                    <div>Author:</div>
-                    <input type="text" name="author" disabled
-                           defaultValue={this.props.author} />
-                </label>
-                <label>
-                    <div>Description:</div>
-                    <textarea name="description" rows="10" disabled
-                              defaultValue={this.props.description} />
-                </label>
-                <div>
-                    <br/>
-                        <font color="red">Please be informed that all comments related to that post will be deleted!!!</font>
-                    <br/><br/>
+            <div className="container">
+                <div className="row">
+                    <div className="col-sm-6 col-md-4 col-md-offset-4">
+                        <div className="account-wall">
+                            <img className="profile-img"
+                                 src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                                 alt=""/>
+                            <form className="form-signin" onSubmit={this.submitForm.bind(this)}>
+                                <input  type="text" className="form-control" placeholder="Title" name="title"
+                                        required ref={e => this.titleField = e} defaultValue={this.props.title}/>
+                                <input type="text" className="form-control" placeholder="Author" disabled
+                                       defaultValue={this.props.author}/>
+                                <textarea type="text" className="form-control" placeholder="Create post" rows="20" required
+                                          ref={e => this.descriptionField = e} autoFocus  defaultValue={this.props.description} />
+                                <div>
+                                    <br/>
+                                    <font color="red">Please be informed that all comments related to that post will be deleted!!!</font>
+                                    <br/><br/>
+                                </div>
+                                <button className="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <input type="submit" value="Delete" />
-                </div>
-            </form>
+            </div>
         );
     }
 
