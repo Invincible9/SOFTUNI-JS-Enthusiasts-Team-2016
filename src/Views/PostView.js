@@ -7,7 +7,13 @@ export default class PostView extends Component {
             <tr key={post._id}>
                 <td>{post.title}</td>
                 <td>{post.author}</td>
-                <td>{post.description}</td>
+                <td>{post.description}
+                    <p>
+                        <i>
+                            <font size="1">Publish date: {post.date.slice(0,33)}</font>
+                        </i>
+                    </p>
+                </td>
                 {this.getActions(post, this.props.userId)}
             </tr>
         );

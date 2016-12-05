@@ -152,6 +152,13 @@ export default class App extends Component {
             .then(loadPostsSuccess.bind(this));
 
         function loadPostsSuccess(posts) {
+            //Function for sorting posts by date in descending order!!!
+            function sortFunction(a, b){
+                let dateA = new Date(a.date).getTime();
+                let dateB = new Date(b.date).getTime();
+                return Number(dateA) < Number(dateB) ? 1 : -1;
+            }
+
             this.showInfo("Post loaded.");
 
             //Cutting all posts length higher than 200 symbols!!!
@@ -161,7 +168,7 @@ export default class App extends Component {
 
             this.showView(
                 <PostsView
-                    posts={posts}
+                    posts={posts.sort(sortFunction)}
                     userId={this.state.userId}
                     editPostClicked={this.preparePostForEdit.bind(this)}
                     deletePostClicked={this.confirmPostDelete.bind(this)}
