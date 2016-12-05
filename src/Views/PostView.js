@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 
-import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+//import '../../node_modules/bootstrap/dist/css/bootstrap.css'
 export default class PostView extends Component {
     render() {
         let postRows = this.props.posts.map(post =>
-
             <tr key={post._id}>
                 <td>{post.title}</td>
                 <td>{post.author}</td>
@@ -44,13 +43,13 @@ export default class PostView extends Component {
                     &nbsp;
                     <input type="button" value="Delete"  className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.deletePostClicked.bind(this, post._id)}/>
-                    <input type="button" value="Details"  className="btn btn-lg btn-primary btn-block"
+                    <input type="button" value="More..."  className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
                 </td>
             );
         else
             return (<td>
-                <input type="button" value="Details" className="btn btn-lg btn-primary btn-block"
+                <input type="button" value="More..." className="btn btn-lg btn-primary btn-block"
                        onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
             </td>);
     }

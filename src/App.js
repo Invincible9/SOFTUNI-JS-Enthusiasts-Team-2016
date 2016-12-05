@@ -153,6 +153,12 @@ export default class App extends Component {
 
         function loadPostsSuccess(posts) {
             this.showInfo("Post loaded.");
+
+            //Cutting all posts length higher than 200 symbols!!!
+            posts.map(post => post.description.length > 200 ?
+            post.description = post.description.slice(0,200) + '...' :
+            '');
+
             this.showView(
                 <PostsView
                     posts={posts}
@@ -292,7 +298,7 @@ export default class App extends Component {
     }
 
     createPost(title, author, description,imageUrl) {
-        KinveyRequester.createPost(title, author, description,imageUrl)
+        KinveyRequester.createPost(title, author, description,imageUrl, new Date())
             .then(createPostSuccess.bind(this));
 
         function createPostSuccess(data) {
