@@ -21,13 +21,13 @@ export default class PostView extends Component {
         return (
             <div className="container">
                 <div className="table-responsive">
-                    <h1>Posts</h1>
+                    <h1>All Posts</h1>
                     <table className="table">
                         <thead>
                         <tr>
                             <th>Title:</th>
-                            <th>Description:</th>
                             <th>Posted by:</th>
+                            <th>Description:</th>
                             <th>Actions</th>
                         </tr>
                         </thead>

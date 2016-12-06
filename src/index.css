@@ -28,6 +28,7 @@ article {
   margin:40px;
   border-radius: 20px;
   overflow: hidden;
+  position: relative;
 }
 
 .home-view h1{
@@ -55,8 +56,8 @@ article {
 
 aside {
   display: inline-block;
-  width: 15%;
-  height: 300px;
+  width: 20%;
+  height: 400px;
   float: right;
   background-color: #FDEEC5;
   opacity: 0.8;
@@ -68,16 +69,39 @@ aside {
 }
 
 aside li {
-  padding: 5px;
+  padding: 10px;
 }
 
 .list{
   list-style-type: none;
 }
+
 article>header>h1 {
   font-size: 1.9em;
 }
+
+aside h3{
+  text-align: center;
+}
+
+hr {
+  border-top: 1px solid red;
+}
+
 .date {
-  display: inline-block;
-  vertical-align: bottom;
+  position : absolute;
+  bottom   : 0;
+  right: 0;
+}
+
+.cars > h1 {
+  color: #ccc;
+}
+
+.carTitle>h2,.carTitle>p{
+  background-color: #FDEEC5;
+  color: black;
+  margin: 10px;
+  width: 280px;
+  text-align: center;
 }

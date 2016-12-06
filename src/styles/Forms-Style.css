@@ -82,3 +82,7 @@
 .btn .btn-lg .btn-primary .btn-block,.btn-add {
     width: 22%;
 }
+
+.table-responsive > h1 {
+    color: #ccc;
+}

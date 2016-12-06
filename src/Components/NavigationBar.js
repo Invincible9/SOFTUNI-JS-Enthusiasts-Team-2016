@@ -35,7 +35,7 @@ export default class NavigationBar extends Component {
                             <li className="active"><a href="#" onClick={this.props.homeClicked}>Home</a></li>
                             <li><a href="#" onClick={this.props.postsClicked}>List All Posts</a></li>
                             <li><a href="#" onClick={this.props.createPostClicked}>Create Post</a></li>
-                            <li><a href="#" onClick={this.props.myPostClicked}>My Post</a></li>
+                            <li><a href="#" onClick={this.props.myPostClicked}>My Posts</a></li>
                             <li><a href="#" onClick={this.props.uploadPhotoClicked}>Upload Image</a></li>
                             <li><a href="#" onClick={this.props.galleryClicked}>Gallery</a></li>
                             <li><a href="#" onClick={this.props.logoutClicked}>Logout</a></li>

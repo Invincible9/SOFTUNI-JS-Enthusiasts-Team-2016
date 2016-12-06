@@ -23,7 +23,7 @@ export default class MyPostsView extends Component {
         return (
             <div className="container">
                 <div className="table-responsive">
-                    <h1>My posts</h1>
+                    <h1>My Posts</h1>
                     <table className="table">
                         <thead>
                         {postTable}
