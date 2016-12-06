@@ -10,7 +10,7 @@ export default class PostDetailsView extends Component {
                     <p>UserName: {this.props.username}</p>
                     <p>FullName: {this.props.fullname}</p>
                     <p>Roles: {this.props.roles}</p>
-                    <p>ExistingAccount: {this.props.isDeleted}</p>
+                    <p>Deleted user: {this.props.isDeleted}</p>
                 </div>
             </div>
         );

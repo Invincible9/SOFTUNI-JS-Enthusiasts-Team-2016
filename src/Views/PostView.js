@@ -46,23 +46,25 @@ export default class PostView extends Component {
     }
 
     getActions(post, userId) {
-        if (post._acl.creator === userId)
+        let role = this.props.role;
+        if (post._acl.creator === userId || role === "admin" || role === "moderator") {
             return (
                 <td>
-                    <input type="button" value="Edit"  className="btn btn-lg btn-primary btn-block"
+                    <input type="button" value="Edit" className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.editPostClicked.bind(this, post._id)}/>
                     &nbsp;
-                    <input type="button" value="Delete"  className="btn btn-lg btn-primary btn-block"
+                    <input type="button" value="Delete" className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.deletePostClicked.bind(this, post._id)}/>
-                    <input type="button" value="More..."  className="btn btn-lg btn-primary btn-block"
+                    <input type="button" value="More..." className="btn btn-lg btn-primary btn-block"
                            onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
                 </td>
             );
-        else
+        } else {
             return (<td>
                 <input type="button" value="More..." className="btn btn-lg btn-primary btn-block"
                        onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
             </td>);
+        }
     }
 
     pagination(countPages, currentPage){

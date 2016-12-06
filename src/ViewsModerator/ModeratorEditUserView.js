@@ -52,7 +52,7 @@ export default class EditUserView extends Component {
 
                     <div className="form-group">
                         <label>
-                            <div>Roles: <b>user</b>/<b>admin</b>/<b>moderator</b></div>
+                            <div>Roles: <i><b>user</b>/<b>admin</b>/<b>moderator</b></i></div>
                             <input className="form-control" type="text" name="roles" required
                                    defaultValue={this.props.roles}
                                    ref={e => this.rolesField = e}/>
@@ -61,7 +61,7 @@ export default class EditUserView extends Component {
 
                     <div className="form-group">
                         <label>
-                            <div>ExistingAccount: <b>true</b>/<b>false</b></div>
+                            <div>Deleted user: <i><b>true</b>/<b>false</b></i></div>
                             <input className="form-control" type="text" name="isDeleted"
                                    defaultValue={this.props.isDeleted}
                                    ref={e => this.isDeletedField = e}/>
@@ -70,7 +70,9 @@ export default class EditUserView extends Component {
 
                     <div className="btn-group">
                         <div>
-                            <input className="btn btn-danger" type="submit" value="Edit"/>
+                            <span><input className="btn btn-danger" type="submit" value="Edit"/></span>
+                            <span style={{marginLeft:'90px'}}><input type="button" value="Cancel" className="btn btn-primary"
+                                                                     onClick={this.props.backToUsers}/></span>
                         </div>
                     </div>
                 </form>

@@ -7,10 +7,10 @@ export default class ModeratorUsersView extends Component {
     render() {
         let userRows = this.props.users.map(user =>
             <tr key={user._id}>
-                <td>{user.username}</td>
-                <td>{user.fullname}</td>
-                <td>{user.roles}</td>
-                <td>{user.isDeleted}</td>
+                <td style={{textAlign:'center'}}>{user.username}</td>
+                <td style={{textAlign:'center'}}>{user.fullname}</td>
+                <td style={{textAlign:'center'}}>{user.roles}</td>
+                <td style={{textAlign:'center'}}>{user.isDeleted}</td>
                 {this.getActions(user, this.props.userId)}
             </tr>
         );
@@ -39,18 +39,28 @@ export default class ModeratorUsersView extends Component {
     }
 
     getActions(user, userId) {
-        return (
-            <td>
-                <div className="form-group">
-                    <input className="btn btn-primary" type="button" value="Edit"
+
+
+        if (user.roles === "user") {
+            return (
+                <td style={{textAlign:'center'}}>
+                    <input type="button" className="btn btn-primary" value="Edit"
                            onClick={this.props.editModeratorUserClicked.bind(this, user._id)}/>
                     &nbsp;
-                    <input className="btn btn-primary" type="button" value="Delete"
+                    <input type="button" className="btn btn-primary" value="Delete"
                            onClick={this.props.deleteModeratorUserClicked.bind(this, user._id)}/>
-                    <input className="btn btn-primary" type="button" value="Details"
+                    &nbsp;
+                    <input type="button" className="btn btn-primary" value="Details"
                            onClick={this.props.viewModeratorUserDetailsClicked.bind(this, user._id)}/>
-                </div>
-            </td>
-        );
+                </td>
+            );
+        } else if (user.roles === "admin" || user.roles === "moderator") {
+            return (
+                <td style={{textAlign:'center'}}>
+                    <input type="button" className="btn btn-primary" value="Details"
+                           onClick={this.props.viewModeratorUserDetailsClicked.bind(this, user._id)}/>
+                </td>
+            );
+        }
     }
 }

@@ -128,8 +128,8 @@ export default class App extends Component {
                 return Number(dateA) < Number(dateB) ? 1 : -1;
             }
 
-            posts.map(post => post.description.length > 600 ?
-                post.description = post.description.slice(0, 600) + ' ...' :
+            posts.map(post => post.description.length > 400 ?
+                post.description = post.description.slice(0, 400) + ' ...' :
                 '');
 
             this.showView(<HomeView posts={posts.sort(sortFunction)}
@@ -230,6 +230,7 @@ export default class App extends Component {
                     countPages={countPages}
                     currentPage={1}
                     userId={this.state.userId}
+                    role={sessionStorage.getItem('roles')}
                     editPostClicked={this.preparePostForEdit.bind(this)}
                     deletePostClicked={this.confirmPostDelete.bind(this)}
                     viewDetailsClicked={this.showViewDetails.bind(this)}
@@ -293,6 +294,7 @@ export default class App extends Component {
                     title={post.title}
                     author={post.author}
                     description={post.description}
+                    backToUsers={this.showPostsView.bind(this)}
                 />
             );
         }
@@ -384,6 +386,7 @@ export default class App extends Component {
                     description={postInfo.description}
                     date={postInfo.date}
                     imageUrl={postInfo.imageUrl}
+                    backToUsers={this.showPostsView.bind(this)}
                 />
             );
         }
@@ -510,6 +513,7 @@ export default class App extends Component {
                     fullname={user.fullname}
                     roles={user.roles}
                     isDeleted={user.isDeleted}
+                    backToUsers={this.showUsersView.bind(this)}
                 />
             );
         }
@@ -530,6 +534,7 @@ export default class App extends Component {
                     fullname={user.fullname}
                     roles={user.roles}
                     isDeleted={user.isDeleted}
+                    backToUsers={this.showUsersView.bind(this)}
                 />
             );
         }
@@ -577,6 +582,7 @@ export default class App extends Component {
                     fullname={dataSuccess.fullname}
                     roles={dataSuccess.roles}
                     isDeleted={dataSuccess.isDeleted}
+                    backToUsers={this.showUsersView.bind(this)}
                 />
             );
         }
@@ -600,6 +606,7 @@ export default class App extends Component {
                     fullname={userInfo.fullname}
                     roles={userInfo.roles}
                     isDeleted={userInfo.isDeleted}
+                    backToUsers={this.showUsersView.bind(this)}
                 />
             );
         }
@@ -621,6 +628,7 @@ export default class App extends Component {
                     fullname={userInfo.fullname}
                     roles={userInfo.roles}
                     isDeleted={userInfo.isDeleted}
+                    backToUsers={this.showUsersView.bind(this)}
                 />
             );
         }

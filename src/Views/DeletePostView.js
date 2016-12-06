@@ -23,6 +23,8 @@ export default class DeletePostView extends Component {
                                     <br/><br/>
                                 </div>
                                 <button className="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+                                <span><input type="button" style={{marginTop:'10px', width:'120px', height:'45px'}} value="Cancel" className="btn btn-primary"
+                                             onClick={this.props.backToUsers}/></span>
                             </form>
                         </div>
                     </div>

@@ -6,10 +6,10 @@ export default class UsersView extends Component {
     render() {
         let userRows = this.props.users.map(user =>
             <tr key={user._id}>
-                <td>{user.username}</td>
-                <td>{user.fullname}</td>
-                <td>{user.roles}</td>
-                <td>{user.isDeleted}</td>
+                <td style={{textAlign:'center'}}>{user.username}</td>
+                <td style={{textAlign:'center'}}>{user.fullname}</td>
+                <td style={{textAlign:'center'}}>{user.roles}</td>
+                <td style={{textAlign:'center'}}>{user.isDeleted}</td>
                 {this.getActions(user, this.props.userId)}
             </tr>
         );
@@ -38,33 +38,20 @@ export default class UsersView extends Component {
     }
 
     getActions(user, userId) {
-        if (user.roles === "user") {
-            return (
-                <td>
-                    <input type="button" className="btn btn-primary" value="Edit"
+        return (
+            <td style={{textAlign:'center'}}>
+                <div className="form-group">
+                    <input className="btn btn-primary" type="button" value="Edit"
                            onClick={this.props.editUserClicked.bind(this, user._id)}/>
                     &nbsp;
-                    <input type="button" className="btn btn-primary" value="Delete"
+                    <input className="btn btn-primary" type="button" value="Delete"
                            onClick={this.props.deleteUserClicked.bind(this, user._id)}/>
-                    <input type="button" className="btn btn-primary" value="Details"
+                    &nbsp;
+                    <input className="btn btn-primary" type="button" value="Details"
                            onClick={this.props.viewUserDetailsClicked.bind(this, user._id)}/>
-                </td>
-            );
-        } else if (user.roles === "admin") {
-            return (
-                <td>
-                    <input type="button" className="btn btn-primary" value="Details"
-                           onClick={this.props.viewUserDetailsClicked.bind(this, user._id)}/>
-                </td>
-            );
-        }
-        else if (user.roles === "moderator") {
-            return (
-                <td>
-                    <input type="button" className="btn btn-primary" value="Details"
-                           onClick={this.props.viewUserDetailsClicked.bind(this, user._id)}/>
-                </td>
-            );
-        }
+                </div>
+            </td>
+        );
+
     }
 }

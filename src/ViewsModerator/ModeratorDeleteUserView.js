@@ -39,7 +39,7 @@ export default class DeleteUserView extends Component {
 
                     <div className="form-group">
                         <label>
-                            <div>ExistingAccount:</div>
+                            <div>Deleted user:</div>
                             <input className="form-control" name="description" disabled="disabled"
                                    defaultValue={this.props.isDeleted}
                                    ref={e => this.isDeleted = e}/>
@@ -48,7 +48,10 @@ export default class DeleteUserView extends Component {
 
                     <div className="form-group">
                         <div>
-                            <input className="btn btn-danger" type="submit" value="DELETE"/>
+                            <span><input className="btn btn-danger" type="submit" value="DELETE"/></span>
+                            &nbsp;
+                            <span style={{marginLeft:'60px'}}><input type="button" value="Cancel" className="btn btn-primary"
+                                                                 onClick={this.props.backToUsers}/></span>
                         </div>
                     </div>
                 </form>

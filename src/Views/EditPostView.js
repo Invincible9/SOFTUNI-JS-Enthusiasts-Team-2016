@@ -20,7 +20,9 @@ export default class EditPostView extends Component {
                                 <textarea type="text" className="form-control" placeholder="Edit post" rows="20" required
                                           defaultValue={this.props.description}
                                           ref={e => this.descriptionField = e} autoFocus="autoFocus"/>
-                                <button className="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
+                                <span><button className="btn btn-lg btn-primary btn-block" style={{ marginLeft:'5px'}} type="submit">Edit</button></span>                                &nbsp;
+                                <span><input type="button" style={{marginTop:'10px', width:'120px', height:'45px'}} value="Cancel" className="btn btn-primary"
+                                                                 onClick={this.props.backToUsers}/></span>
                             </form>
                         </div>
                     </div>
