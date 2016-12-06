@@ -198,13 +198,14 @@ export default class App extends Component {
         });
     }
 
+    //Added PAGINATION
     showPostsView() {
         KinveyRequester.findAllPosts()
             .then(loadPostsSuccess.bind(this));
 
         function loadPostsSuccess(posts) {
             //Function for sorting posts by date in descending order!!!
-            function sortFunction(a, b) {
+            function sortFunction(a, b){
                 let dateA = new Date(a.date).getTime();
                 let dateB = new Date(b.date).getTime();
                 return Number(dateA) < Number(dateB) ? 1 : -1;
@@ -214,18 +215,47 @@ export default class App extends Component {
 
             //Cutting all posts length higher than 200 symbols!!!
             posts.map(post => post.description.length > 200 ?
-                post.description = post.description.slice(0, 200) + '...' :
+                post.description = post.description.slice(0,200) + '...' :
                 '');
+
+            let postsPerPage = 4;
+            let startPostNumber = 0
+            let countPages = Math.ceil(Number(posts.length) / postsPerPage);
+            let postsToDisplay = posts.sort(sortFunction).slice(startPostNumber, startPostNumber+postsPerPage)
 
             this.showView(
                 <PostsView
-                    posts={posts.sort(sortFunction)}
+                    posts={postsToDisplay}
+                    postsPerPage={postsPerPage}
+                    countPages={countPages}
+                    currentPage={1}
                     userId={this.state.userId}
                     editPostClicked={this.preparePostForEdit.bind(this)}
                     deletePostClicked={this.confirmPostDelete.bind(this)}
                     viewDetailsClicked={this.showViewDetails.bind(this)}
+                    pageNumberClicked={showPageClicked.bind(this)}
                 />
             );
+
+            function showPageClicked(currentPage){
+                startPostNumber = postsPerPage*(currentPage - 1);
+                postsToDisplay = posts.sort(sortFunction).slice(startPostNumber, startPostNumber+postsPerPage)
+                // console.log(posts.sort(sortFunction)[startPostNumber]);
+                // console.log(postsToDisplay);
+                this.showView(
+                    <PostsView
+                        posts={postsToDisplay}
+                        postsPerPage={postsPerPage}
+                        countPages={countPages}
+                        currentPage={currentPage}
+                        userId={this.state.userId}
+                        editPostClicked={this.preparePostForEdit.bind(this)}
+                        deletePostClicked={this.confirmPostDelete.bind(this)}
+                        viewDetailsClicked={this.showViewDetails.bind(this)}
+                        pageNumberClicked={showPageClicked.bind(this)}
+                    />
+                );
+            }
         }
     }
 
@@ -352,13 +382,15 @@ export default class App extends Component {
                     title={postInfo.title}
                     author={postInfo.author}
                     description={postInfo.description}
+                    date={postInfo.date}
+                    imageUrl={postInfo.imageUrl}
                 />
             );
         }
     }
 
-    editPost(postId, title, author, description) {
-        KinveyRequester.editPost(postId, title, author, description)
+    editPost(postId, title, author, description, date, url) {
+        KinveyRequester.editPost(postId, title, author, description, date, url)
             .then(editPostSuccess.bind(this));
 
         function editPostSuccess() {

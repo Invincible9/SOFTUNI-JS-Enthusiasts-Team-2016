@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-
 import '../../node_modules/bootstrap/dist/css/bootstrap.css'
+
 export default class PostView extends Component {
     render() {
+        let currentPage = this.props.currentPage;
+        let countPages = this.props.countPages;
         let postRows = this.props.posts.map(post =>
             <tr key={post._id}>
                 <td>{post.title}</td>
@@ -36,6 +38,9 @@ export default class PostView extends Component {
                         </tbody>
                     </table>
                 </div>
+                <div>
+                    {this.pagination(countPages, currentPage)}
+                </div>
             </div>
         );
     }
@@ -58,5 +63,18 @@ export default class PostView extends Component {
                 <input type="button" value="More..." className="btn btn-lg btn-primary btn-block"
                        onClick={this.props.viewDetailsClicked.bind(this, post._id)}/>
             </td>);
+    }
+
+    pagination(countPages, currentPage){
+        let html = [];
+
+        for(let i = 1; i <= countPages; i++) {
+            html.push(<span key={i}><input type="button" value={i}  style={{border: '1px solid','color': i === currentPage ? "red" : "grey"}}
+                                           onClick={this.props.pageNumberClicked.bind(this, i)}/> </span>)
+        }
+
+        return(
+                html
+        )
     }
 }

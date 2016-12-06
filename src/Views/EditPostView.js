@@ -35,6 +35,8 @@ export default class EditPostView extends Component {
             this.titleField.value,
             this.authorField.value,
             this.descriptionField.value,
+            this.props.date,
+            this.props.imageUrl
         );
     }
 }

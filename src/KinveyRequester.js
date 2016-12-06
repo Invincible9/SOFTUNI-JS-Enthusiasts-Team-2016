@@ -147,12 +147,12 @@ const KinveyRequester = (function() {
             contentType: 'application/JSON'
         });
     }
-    function editPost(postId, title, author, description) {
+    function editPost(postId, title, author, description, date, imageUrl) {
         return $.ajax({
             method: "PUT",
             url: baseUrl + "appdata/" + appKey + "/posts/" + postId,
             headers: getKinveyUserAuthHeaders(),
-            data: { title, author, description } // add url
+            data: { title, author, description, date, imageUrl} // add url
         });
     }
 
