@@ -16,10 +16,12 @@ export default class PostDetailsView extends Component {
 
         return (
             <div className="details-view">
+                <input type="button" value="Back to Posts" className="btn btn-lg btn-primary"
+                       onClick={this.props.backToPosts}/>
                 <h1>{this.props.title}</h1>
-                <div>Posted by: {this.props.author}</div>
-                <img src={this.props.imageUrl} alt=""/>
-                <p><span className="postContent">Post content:</span> {this.props.content}</p>
+                <span>Posted by: {this.props.author}</span>
+                <img src={this.props.imageUrl}  alt=""/>
+                <p><span className="postContent">Post content:</span> <p className="cont">{this.props.content}</p></p>
                 <div>
                     {commentsRow}
                 </div>
@@ -31,7 +33,7 @@ export default class PostDetailsView extends Component {
     addComment(post, postId) {
         if(sessionStorage.getItem('userId')) {
             return (
-                <input type="button" value="Add comment" className="btn btn-lg btn-primary btn-block"
+                <input type="button" value="Add comment" className="btn btn-lg btn-primary"
                        onClick={this.props.addCommentClicked.bind(this, postId)}/>
             );
         } else {

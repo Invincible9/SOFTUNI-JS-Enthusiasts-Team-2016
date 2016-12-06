@@ -105,3 +105,20 @@ hr {
   width: 280px;
   text-align: center;
 }
+
+.details-view>span{
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.details-view>img {
+  display: block;
+  max-width: 300px;
+  max-height: 300px;
+  margin: 0 auto;
+}
+
+.cont{
+  font-size: 20px;
+}

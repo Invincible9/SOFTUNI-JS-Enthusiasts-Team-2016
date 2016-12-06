@@ -4,7 +4,6 @@ export default class HomeView extends Component {
         let postsRows = this.props.posts.map(post =>
             <article key={post._id}>
                 <h1>{this.getActions(post, this.props.userId)}</h1>
-
                     <p>Posted by: {post.author}</p>
                 <hr/>
                 <p>{post.description}</p>
@@ -38,7 +37,6 @@ export default class HomeView extends Component {
 
     getActions(post, userId) {
         return (
-
                 <a href="#"  onClick={this.props.postTitleClicked.bind(this, post._id)}>{post.title}</a>
         )
 

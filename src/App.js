@@ -128,8 +128,8 @@ export default class App extends Component {
                 return Number(dateA) < Number(dateB) ? 1 : -1;
             }
 
-            posts.map(post => post.description.length > 200 ?
-                post.description = post.description.slice(0, 200) + '...' :
+            posts.map(post => post.description.length > 600 ?
+                post.description = post.description.slice(0, 600) + ' ...' :
                 '');
 
             this.showView(<HomeView posts={posts.sort(sortFunction)}
@@ -151,7 +151,7 @@ export default class App extends Component {
         function loginSuccess(userInfo) {
             if (userInfo.isDeleted !== "true") {
                 this.saveAuthInSession(userInfo);
-                this.showPostsView();
+                this.showGuestView();
                 this.showInfo("Login successful.");
             }
         }
@@ -304,6 +304,7 @@ export default class App extends Component {
                     author={post.author}
                     content={post.description}
                     addCommentClicked={this.showViewAddComment.bind(this)}
+                    backToPosts={(sessionStorage.getItem('userId'))? this.showPostsView.bind(this):this.showGuestView.bind(this)}
                 />
             );
         }
